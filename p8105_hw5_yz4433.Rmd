@@ -13,3 +13,9 @@ library(broom)
 library(rlist)
 set.seed(1)
 ```
+
+
+## Problem 2
+```{r}
+hddata = read.csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+```
