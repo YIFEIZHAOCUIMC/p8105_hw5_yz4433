@@ -1,0 +1,15 @@
+---
+title: "p8105_hw5_yz4433"
+author: "Yifei Zhao"
+date: "2022-11-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(httr)
+library(broom)
+library(rlist)
+set.seed(1)
+```
