@@ -64,8 +64,7 @@ p = ggplot(listcol_df, aes(x = reorder(city_state, estimation), y = estimation, 
   geom_errorbar(aes(ymin = ci_low, ymax = ci_high), width = .2, position = position_dodge(.9)) +
   theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  labs(title = "estimates and CIs for each city")
-
+  labs(x = "city name", y = "estimated proportion", title = "estimates and CIs for each city")
 print(p)
 ```
 
