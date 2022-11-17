@@ -128,5 +128,12 @@ rej_fun = function(lt){
 list0 = list('1', '2', '3', '4', '5', '6')
 list1 = list(rej_fun(t1), rej_fun(t2), rej_fun(t3), rej_fun(t4), rej_fun(t5), rej_fun(t6))
 plot(list0, list1, type = "b", pch = 19, 
-     col = "red", xlab = "mean", ylab = "proportion", main = 'proportion plot')
+     col = "red", xlab = "mean", ylab = "proportion of times the null was rejected", main = 'proportion plot')
+```
+
+### general average estimate plot
+```{r}
+list2 = list(mean(array(unlist(t1[[1]]))), mean(array(unlist(t2[[1]]))), mean(array(unlist(t3[[1]]))), mean(array(unlist(t4[[1]]))), mean(array(unlist(t5[[1]]))), mean(array(unlist(t6[[1]]))))
+plot(list0, list2, type = "b", pch = 19, 
+     col = "red", xlab = "true value", ylab = "estimate value", main = 'average estimate plot')
 ```
