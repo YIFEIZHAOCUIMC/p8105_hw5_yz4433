@@ -392,6 +392,24 @@ sumdata = tidydata %&gt;%
 estbal = pull(rsbal, estimate)
 cibal = c(pull(rsbal, conf.low), pull(rsbal, conf.high))</code></pre>
 </div>
+<div id="prop.test-for-each-city" class="section level3">
+<h3>prop.test for each city</h3>
+<pre class="r"><code>test_fun = function(x, y){data.frame(
+  estimation = pull(broom::tidy(prop.test(x,y)), estimate),
+  ci_low = pull(broom::tidy(prop.test(x,y)), conf.low),
+  ci_high = pull(broom::tidy(prop.test(x,y)), conf.high))
+}
+
+listcol_df = sumdata %&gt;% 
+  mutate(testrs = map2(pull(sumdata, unsolved), pull(sumdata, total), test_fun)) %&gt;% 
+  select(-c(total, unsolved)) %&gt;% 
+  unnest(cols = testrs)</code></pre>
+<pre><code>## Warning in prop.test(x, y): Chi-squared近似算法有可能不准
+
+## Warning in prop.test(x, y): Chi-squared近似算法有可能不准
+
+## Warning in prop.test(x, y): Chi-squared近似算法有可能不准</code></pre>
+</div>
 </div>
 
 
