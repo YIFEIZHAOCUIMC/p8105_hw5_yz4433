@@ -66,3 +66,21 @@ p = ggplot(listcol_df, aes(x = city_state, y = estimation, fill = city_state)) +
 
 print(p)
 ```
+
+## Problem 3
+### data with mean = 0
+```{r}
+output0 = vector("list", 5000)
+for (i in 1:5000) {
+  output0[[i]] = tibble(x = rnorm(30, mean = 0, sd = 5))
+}
+```
+
+```{r}
+paralist0 = vector("list", 5000)
+pvlist0 = vector("list", 5000)
+for (i in 1:5000) {
+  paralist0[[i]] = pull(broom::tidy(t.test(unlist(output0[i]), mu = 0, alternative = "two.sided")), estimate)
+  pvlist0[[i]] = pull(broom::tidy(t.test(unlist(output0[i]), mu = 0, alternative = "two.sided")), p.value)
+}
+```
