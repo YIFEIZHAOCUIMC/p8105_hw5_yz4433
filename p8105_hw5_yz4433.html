@@ -385,6 +385,13 @@ sumdata = tidydata %&gt;%
     total = sum(group == &#39;solved&#39; | group == &#39;unsolved&#39;  ),
     unsolved = sum(group == &#39;unsolved&#39;))</code></pre>
 </div>
+<div id="prop.test-for-baltimore-md" class="section level3">
+<h3>prop.test for Baltimore, MD</h3>
+<pre class="r"><code>rsbal = prop.test(sumdata[[1,3]], sumdata[[1,2]]) %&gt;% 
+  broom::tidy()
+estbal = pull(rsbal, estimate)
+cibal = c(pull(rsbal, conf.low), pull(rsbal, conf.high))</code></pre>
+</div>
 </div>
 
 

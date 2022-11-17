@@ -32,3 +32,11 @@ sumdata = tidydata %>%
     total = sum(group == 'solved' | group == 'unsolved'  ),
     unsolved = sum(group == 'unsolved'))
 ```
+
+### prop.test for Baltimore, MD
+```{r}
+rsbal = prop.test(sumdata[[1,3]], sumdata[[1,2]]) %>% 
+  broom::tidy()
+estbal = pull(rsbal, estimate)
+cibal = c(pull(rsbal, conf.low), pull(rsbal, conf.high))
+```
