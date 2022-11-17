@@ -84,3 +84,30 @@ for (i in 1:5000) {
   pvlist0[[i]] = pull(broom::tidy(t.test(unlist(output0[i]), mu = 0, alternative = "two.sided")), p.value)
 }
 ```
+
+### other groups
+```{r}
+ttest_fun = function(m){
+  output = vector("list", 5000)
+  for (i in 1:5000) {
+    output[[i]] = tibble(x = rnorm(30, mean = m, sd = 5))
+  }
+  paralist = vector("list", 5000)
+  pvlist = vector("list", 5000)
+  for (i in 1:5000) {
+    paralist[[i]] = pull(broom::tidy(t.test(unlist(output[i]), mu = 0, alternative = "two.sided")), estimate)
+    pvlist[[i]] = pull(broom::tidy(t.test(unlist(output[i]), mu = 0, alternative = "two.sided")), p.value)
+  }
+  list(paralist, pvlist)
+  }
+```
+
+### groups generation
+```{r}
+t1 = ttest_fun(1)
+t2 = ttest_fun(2)
+t3 = ttest_fun(3)
+t4 = ttest_fun(4)
+t5 = ttest_fun(5)
+t6 = ttest_fun(6)
+```
