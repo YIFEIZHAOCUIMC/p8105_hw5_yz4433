@@ -19,3 +19,16 @@ set.seed(1)
 ```{r}
 hddata = read.csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
 ```
+
+### Homecides summary
+```{r}
+tidydata = hddata %>% 
+  mutate(city_state = paste(city,',',state))
+
+sumdata = tidydata %>% 
+  mutate(group = ifelse((disposition == 'Closed by arrest'), 'solved', 'unsolved')) %>% 
+  group_by(city_state) %>% 
+  summarise(
+    total = sum(group == 'solved' | group == 'unsolved'  ),
+    unsolved = sum(group == 'unsolved'))
+```

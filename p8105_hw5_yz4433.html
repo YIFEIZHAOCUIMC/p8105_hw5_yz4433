@@ -373,6 +373,18 @@ pre code {
 <div id="problem-2" class="section level2">
 <h2>Problem 2</h2>
 <pre class="r"><code>hddata = read.csv(&quot;https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv&quot;)</code></pre>
+<div id="homecides-summary" class="section level3">
+<h3>Homecides summary</h3>
+<pre class="r"><code>tidydata = hddata %&gt;% 
+  mutate(city_state = paste(city,&#39;,&#39;,state))
+
+sumdata = tidydata %&gt;% 
+  mutate(group = ifelse((disposition == &#39;Closed by arrest&#39;), &#39;solved&#39;, &#39;unsolved&#39;)) %&gt;% 
+  group_by(city_state) %&gt;% 
+  summarise(
+    total = sum(group == &#39;solved&#39; | group == &#39;unsolved&#39;  ),
+    unsolved = sum(group == &#39;unsolved&#39;))</code></pre>
+</div>
 </div>
 
 
