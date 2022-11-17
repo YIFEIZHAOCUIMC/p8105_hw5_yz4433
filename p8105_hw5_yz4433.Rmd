@@ -20,6 +20,8 @@ set.seed(1)
 hddata = read.csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
 ```
 
+For homicide-data, a `r nrow(hddata)` $\times$ `r ncol(hddata)` dataset, the key variables are city, victim information variables, and deposition, describing the location of the homicide, basic demographic information about each victim, and mapped with whether an arrest was made over the past decade in 50 of the largest American cities. Meanwhile, there are no missing values for disposition and the dataset is mostly tidy in a whole view.
+
 ### Homecides summary
 ```{r}
 tidydata = hddata %>% 
@@ -57,7 +59,7 @@ listcol_df = sumdata %>%
 
 ### estimates and CIs plot
 ```{r}
-p = ggplot(listcol_df, aes(x = city_state, y = estimation, fill = city_state)) + 
+p = ggplot(listcol_df, aes(x = reorder(city_state, estimation), y = estimation, fill = city_state)) + 
   geom_bar(stat = "identity", color = "black", position = position_dodge()) +
   geom_errorbar(aes(ymin = ci_low, ymax = ci_high), width = .2, position = position_dodge(.9)) +
   theme(legend.position = "none") +
@@ -99,7 +101,7 @@ ttest_fun = function(m){
     pvlist[[i]] = pull(broom::tidy(t.test(unlist(output[i]), mu = 0, alternative = "two.sided")), p.value)
   }
   resl = list(paralist, pvlist)
-  resl = matrix(unlist(resl),byrow=FALSE,ncol = 2) %>% 
+  resl = matrix(unlist(resl),byrow = FALSE,ncol = 2) %>% 
     data.frame()
   }
 ```
