@@ -111,3 +111,22 @@ t4 = ttest_fun(4)
 t5 = ttest_fun(5)
 t6 = ttest_fun(6)
 ```
+
+### proportion calculation
+```{r}
+rej_fun = function(lt){
+  x = 0
+  for (i in 1:5000) {
+    x = ifelse((lt[[2]][[i]] <= 0.05), x+1, x)
+  }
+  x/5000
+}
+```
+
+### proportion plot
+```{r}
+list0 = list('1', '2', '3', '4', '5', '6')
+list1 = list(rej_fun(t1), rej_fun(t2), rej_fun(t3), rej_fun(t4), rej_fun(t5), rej_fun(t6))
+plot(list0, list1, type = "b", pch = 19, 
+     col = "red", xlab = "mean", ylab = "proportion", main = 'proportion plot')
+```
