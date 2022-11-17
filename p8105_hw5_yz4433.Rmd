@@ -18,7 +18,7 @@ set.seed(1)
 
 The code chunk below imports the data in individual spreadsheets contained in `./data/zip_data/`. To do this, I create a dataframe that includes the list of all files in that directory and the complete path to each file. As a next step, I `map` over paths and import data using the `read_csv` function. Finally, I `unnest` the result of `map`.
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 full_df = 
   tibble(
     files = list.files("data/zip_data/"),
@@ -87,7 +87,7 @@ cibal = c(pull(rsbal, conf.low), pull(rsbal, conf.high))
 ```
 
 ### prop.test for each city
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 test_fun = function(x, y){data.frame(
   estimation = pull(broom::tidy(prop.test(x,y)), estimate),
   ci_low = pull(broom::tidy(prop.test(x,y)), conf.low),
@@ -164,20 +164,28 @@ t6 = ttest_fun(6)
 ```{r}
 list0 = list('1', '2', '3', '4', '5', '6')
 list1 = list(nrow(filter(t1, X2 <= 0.05))/5000, nrow(filter(t2, X2 <= 0.05))/5000, nrow(filter(t3, X2 <= 0.05))/5000, nrow(filter(t4, X2 <= 0.05))/5000, nrow(filter(t5, X2 <= 0.05))/5000, nrow(filter(t6, X2 <= 0.05))/5000)
+
+par(pin = c(4,4))
 plot(list0, list1, type = "b", pch = 19, 
      col = "red", xlab = "mean", ylab = "proportion of times the null was rejected", main = 'proportion plot')
 ```
 
-### average estimate plot
+From the plot, under the same sample size, as the mean of simulated sample increases, the proportion of times the null was rejected increases, which means if we do not change the sample size, and the effect size of the intervention is large, the likelihood of existing an effect is high, equivalently the power is high.
+
+### general plot
 ```{r}
 list2 = list(mean(t1[[1]]), mean(t2[[1]]), mean(t3[[1]]), mean(t4[[1]]), mean(t5[[1]]), mean(t6[[1]]))
 plot(list0, list2, type = "b", pch = 19, ylim = c(0,7),
      col = "red", xlab = "true value", ylab = "estimate value", main = 'general average estimate plot')
 ```
 
-### restricted estimate plot
+### restricted plot
 ```{r}
 list2 = list(mean(filter(t1, X2 <= 0.05)[[1]]), mean(filter(t2, X2 <= 0.05)[[1]]), mean(filter(t3, X2 <= 0.05)[[1]]), mean(filter(t4, X2 <= 0.05)[[1]]), mean(filter(t5, X2 <= 0.05)[[1]]), mean(filter(t6, X2 <= 0.05)[[1]]))
 plot(list0, list2, type = "b", pch = 19, ylim = c(0,7),
      col = "red", xlab = "true value", ylab = "estimate value", main = 'restricted average estimate plot')
 ```
+
+Comparing the restricted plot with general plot for average estimate of $\hat{\mu}$ under different $\mu$, we clearly find the sample average of $\hat{\mu}$ across tests for which the null is rejected approximately is not equal to the true value of $\mu$. 
+
+It is mainly because small effect size implies there is a not big part of reject, and thus the average of $\hat{\mu}$ for rejected samples are large and far from $\mu$. On the contrary, the large effect size (greater than 4) implies there the sample is mostly rejected under such t-test, and thus the average of $\hat{\mu}$ are actually close to $\mu$.
