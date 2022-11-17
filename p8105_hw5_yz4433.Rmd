@@ -98,7 +98,9 @@ ttest_fun = function(m){
     paralist[[i]] = pull(broom::tidy(t.test(unlist(output[i]), mu = 0, alternative = "two.sided")), estimate)
     pvlist[[i]] = pull(broom::tidy(t.test(unlist(output[i]), mu = 0, alternative = "two.sided")), p.value)
   }
-  list(paralist, pvlist)
+  resl = list(paralist, pvlist)
+  resl = matrix(unlist(resl),byrow=FALSE,ncol = 2) %>% 
+    data.frame()
   }
 ```
 
@@ -113,27 +115,24 @@ t6 = ttest_fun(6)
 ```
 
 ### proportion calculation
-```{r}
-rej_fun = function(lt){
-  x = 0
-  for (i in 1:5000) {
-    x = ifelse((lt[[2]][[i]] <= 0.05), x+1, x)
-  }
-  x/5000
-}
-```
-
 ### proportion plot
 ```{r}
 list0 = list('1', '2', '3', '4', '5', '6')
-list1 = list(rej_fun(t1), rej_fun(t2), rej_fun(t3), rej_fun(t4), rej_fun(t5), rej_fun(t6))
+list1 = list(nrow(filter(t1, X2 <= 0.05))/5000, nrow(filter(t2, X2 <= 0.05))/5000, nrow(filter(t3, X2 <= 0.05))/5000, nrow(filter(t4, X2 <= 0.05))/5000, nrow(filter(t5, X2 <= 0.05))/5000, nrow(filter(t6, X2 <= 0.05))/5000)
 plot(list0, list1, type = "b", pch = 19, 
      col = "red", xlab = "mean", ylab = "proportion of times the null was rejected", main = 'proportion plot')
 ```
 
-### general average estimate plot
+### average estimate plot
 ```{r}
-list2 = list(mean(array(unlist(t1[[1]]))), mean(array(unlist(t2[[1]]))), mean(array(unlist(t3[[1]]))), mean(array(unlist(t4[[1]]))), mean(array(unlist(t5[[1]]))), mean(array(unlist(t6[[1]]))))
-plot(list0, list2, type = "b", pch = 19, 
-     col = "red", xlab = "true value", ylab = "estimate value", main = 'average estimate plot')
+list2 = list(mean(t1[[1]]), mean(t2[[1]]), mean(t3[[1]]), mean(t4[[1]]), mean(t5[[1]]), mean(t6[[1]]))
+plot(list0, list2, type = "b", pch = 19, ylim = c(0,7),
+     col = "red", xlab = "true value", ylab = "estimate value", main = 'general average estimate plot')
+```
+
+### restricted estimate plot
+```{r}
+list2 = list(mean(filter(t1, X2 <= 0.05)[[1]]), mean(filter(t2, X2 <= 0.05)[[1]]), mean(filter(t3, X2 <= 0.05)[[1]]), mean(filter(t4, X2 <= 0.05)[[1]]), mean(filter(t5, X2 <= 0.05)[[1]]), mean(filter(t6, X2 <= 0.05)[[1]]))
+plot(list0, list2, type = "b", pch = 19, ylim = c(0,7),
+     col = "red", xlab = "true value", ylab = "estimate value", main = 'restricted average estimate plot')
 ```
