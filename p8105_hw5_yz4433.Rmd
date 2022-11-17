@@ -54,3 +54,15 @@ listcol_df = sumdata %>%
   select(-c(total, unsolved)) %>% 
   unnest(cols = testrs)
 ```
+
+### estimates and CIs plot
+```{r}
+p = ggplot(listcol_df, aes(x = city_state, y = estimation, fill = city_state)) + 
+  geom_bar(stat = "identity", color = "black", position = position_dodge()) +
+  geom_errorbar(aes(ymin = ci_low, ymax = ci_high), width = .2, position = position_dodge(.9)) +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "estimates and CIs for each city")
+
+print(p)
+```
